@@ -1,4 +1,4 @@
-# Held Effect ReadMe
+# Held Effect README rundown
 
 <div style="display: flex; align-items: flex-start;">
     <img src="Images/SceneStructure.png" alt="Your Image" width="500" style="margin-right: 20px;">
