@@ -1,8 +1,6 @@
 # Held-Effect
-![alt text](Images/SceneStructure.png "How the scene should be structured")
-How the scene should be made when using the scripts 
 
-<div style="display: flex; align-items: center;">
+<div style="display: flex; align-items: flex-start;">
     <img src="Images/SceneStructure.png" alt="Your Image" width="200" style="margin-right: 20px;">
     <div>
         <h3>Your Title</h3>
