@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://de3yvv4ntwupi"]
+
+[ext_resource type="Script" path="res://Scripts/UI/Card/CardScript.gd" id="1_ke1pr"]
+[ext_resource type="Script" path="res://Scripts/UI/Card/StateMachine.gd" id="2_e71l6"]
+[ext_resource type="Script" path="res://Scripts/UI/Card/States/HeldState.gd" id="3_lsy5h"]
+[ext_resource type="Script" path="res://Scripts/UI/Card/States/ReturningState.gd" id="4_igtmx"]
+[ext_resource type="Script" path="res://Scripts/UI/Card/States/IdleState.gd" id="5_0o1bh"]
+
+[sub_resource type="Curve" id="Curve_nfyvt"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0571931, 0.0, 0, 0]
+point_count = 2
+
+[node name="CardContainer" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="." node_paths=PackedStringArray("card_point_node")]
+layout_mode = 0
+offset_right = 85.0
+offset_bottom = 117.0
+focus_mode = 1
+script = ExtResource("1_ke1pr")
+card_point_node = NodePath("../CardPosition")
+
+[node name="StateMachine" type="Node" parent="Button" node_paths=PackedStringArray("intinal_state")]
+script = ExtResource("2_e71l6")
+intinal_state = NodePath("Idle")
+
+[node name="Held" type="Node" parent="Button/StateMachine" node_paths=PackedStringArray("card", "card_UI")]
+script = ExtResource("3_lsy5h")
+card = NodePath("../../..")
+card_UI = NodePath("../..")
+rotation_amount = 80.0
+rotation_ease_weight = SubResource("Curve_nfyvt")
+
+[node name="Returning" type="Node" parent="Button/StateMachine" node_paths=PackedStringArray("card", "card_UI", "card_point_node")]
+script = ExtResource("4_igtmx")
+card = NodePath("../../..")
+card_UI = NodePath("../..")
+card_point_node = NodePath("../../../CardPosition")
+
+[node name="Idle" type="Node" parent="Button/StateMachine" node_paths=PackedStringArray("card", "card_point_node")]
+script = ExtResource("5_0o1bh")
+card = NodePath("../../..")
+card_point_node = NodePath("../../../CardPosition")
+
+[node name="CardPosition" type="Node2D" parent="."]
+position = Vector2(500, 500)
+
+[connection signal="button_down" from="Button" to="Button" method="_on_button_down"]
+[connection signal="button_up" from="Button" to="Button" method="_on_button_up"]
+[connection signal="mouse_entered" from="Button" to="Button" method="_on_mouse_entered"]
