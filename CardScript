@@ -1,0 +1,39 @@
+# Script for a Button that interacts with a state machine and responds to mouse events
+
+extends Button
+
+# Cached reference to the button node itself and its original position
+@onready var button = $"."
+@onready var orginal_pos : Vector2 = button.position
+
+# Reference to the state machine for managing transitions
+@onready var state_machine : Node = $StateMachine
+@export var card_point_node : Node2D  # Node used to set a specific position on screen for the card
+
+# Initializes the button's appearance when added to the scene
+func _ready():
+	# Sets the button's hover and pressed style to match the normal style
+	var normal_style = button.get_theme_stylebox("normal", "Button")
+	button.add_theme_stylebox_override("hover", normal_style)
+	button.add_theme_stylebox_override("pressed", normal_style)
+
+# Update function that positions the card point node at a specified location each frame
+func _process(delta):
+	card_point_node.position = Vector2(
+		get_viewport().get_visible_rect().size.x / 2 - button.size.x / 2, 
+		get_viewport().get_visible_rect().size.y * 0.8
+	)
+
+# Transition to "Held" state when the button is pressed
+func _on_button_down():
+	state_machine.request_transition("Held")
+
+# Transition to "Returning" state and release focus when the button is released
+func _on_button_up():
+	state_machine.request_transition("Returning")
+	release_focus()
+
+# Triggers a "Shake" action if the button is hovered, provided it's not in the "Held" or "Returning" state
+func _on_mouse_entered():
+	if state_machine.see_current_state() != "Held" and state_machine.see_current_state() != "Returning":
+		print("Shake")
